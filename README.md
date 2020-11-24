@@ -9,6 +9,14 @@ This repository stores the code associated with the project:
 Authors: **Maria Fernanda Torres Jiménez<sup>1,2</sup>**, Nicolas Chazot<sup>1,2</sup>, Thaise Emilio<sup>3</sup>, Alexandre Antonelli<sup>1,2,4,5</sup>, Søren Faurby<sup>1,2</sup>, Christine D. Bacon<sup>1,2</sup>
 
 
+Author institutions:
+<sup>1</sup>Department of Biological and Environmental Sciences, University of Gothenburg, Box 461, SE-405 30 Gothenburg, Sweden
+<sup>2</sup>Gothenburg Global Biodiversity Centre, Box 461, SE-405 30 Gothenburg, Sweden
+<sup>3</sup>Department of Plant Biology, Institute of Biology, University of Campinas, Campinas, São Paolo, Brazil
+<sup>4</sup>Department of Plant Sciences, University of Oxford, South Parks Road, OX1 3RB Oxford, United Kingdom
+<sup>5</sup>Royal Botanical Gardens Kew, TW9 3AE Richmond, United Kingdom
+
+
 Abstract
 -------------
 
