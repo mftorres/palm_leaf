@@ -1,9 +1,9 @@
-<p style="text-align: center;">Palm Leaf notebook repository</p>
+<p align="center">Palm Leaf notebook repository</p>
 =============
 
 This repository stores the code associated with the project:
 
-<p style="text-align: center;">**Plant habit and temperature seasonality determine leaf shape in palms (Arecaceae)**</p>
+<p align="center">**Plant habit and temperature seasonality determine leaf shape in palms (Arecaceae)**</p>
 =============
 
 Authors: **Maria Fernanda Torres Jiménez<sup>1,2</sup>**, Nicolas Chazot<sup>1,2</sup>, Thaise Emilio<sup>3</sup>, Alexandre Antonelli<sup>1,2,4,5</sup>, Søren Faurby<sup>1,2</sup>, Christine D. Bacon<sup>1,2</sup>
