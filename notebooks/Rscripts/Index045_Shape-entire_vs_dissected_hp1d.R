@@ -2,7 +2,11 @@ library(ape)
 library(phytools)
 library(MCMCglmmRAM)
 library(dplyr)
-
+library(foreach)
+library(doParallel)
+numCores <- detectCores()
+numCores
+registerDoParallel(numCores)
 completeFun <- function(data, desiredCols) {
   completeVec <- complete.cases(data[, desiredCols])
   return(data[completeVec, ])
@@ -11,7 +15,7 @@ dataall<-read.csv("./palms_alltraits_curated_20220620.csv",quote="",sep="\t",hea
 posdis42<-read.tree("./Clean_1_42presampled.trees")
 data_pre<-completeFun(dataall,c('CHELSA_ai_stand', 'CHELSA_bio1_stand', 'CHELSA_bio4_stand', 'CHELSA_bio15_stand', 'StemHeightBladeLength_stand'))
 
-data_hp1a<-filter(data_pre, entire_binomial == "True" | dissection == 1)
+data_hp1d<-filter(data_pre, entire_binomial == "True" | dissection == 1)
 rownames(data_hp1d) <- data_hp1d$tip_name
 data_hp1d$dissection<-factor(data_hp1d$dissection)
 data_hp1d$CHELSA_ai_stand<-as.numeric(data_hp1d$CHELSA_ai_stand)
@@ -30,9 +34,10 @@ I <- diag(k-1)
 J <- matrix(rep(1, (k-1)^2), c(k-1, k-1))
 priors<-list(R=list(V=(1/k)*(I+J), fix=1), G=list(G1=list(V=diag(k-1), nu=0.002)))
 n_tree=42
+packages=c("ape","phytools","MCMCglmmRAM","dplyr")
 hp1d_postdist<-c()
-for(tree in 1:n_tree){
-	tree2<-drop.tip(posdis42[[tree]],c(missingspp))
+hp1d_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar% {
+	tree2<-drop.tip(posdis42[[i]],c(missingspp))
 	modelhp1d<- MCMCglmm(dissection~CHELSA_ai_stand+CHELSA_bio1_stand+CHELSA_bio12_stand+CHELSA_bio15_stand+HeightOverCanopy_stand,
 			random = ~animal,
 			data = data_hp1d,
@@ -44,7 +49,7 @@ for(tree in 1:n_tree){
 			burnin = Nburn, nitt = Nnitt, thin = Nthin,
 			pr = TRUE, pl = TRUE, saveX = TRUE,  saveZ = TRUE)
 	hp1d_postdist<-rbind(hp1d_postdist,modelhp1d$Sol)
-	write.table(hp1d_postdist,"./Shape-entire_vs_dissected_hp1d_postdist.txt",sep="\t")
+	write.table(hp1d_postdist,"./Shape-entire_vs_dissected_hp1d_postdist-2.txt",sep="\t")
 }
-write.table(hp1d_postdist,"./Shape-entire_vs_dissected_hp1d_postdist.txt",sep="\t")
-save.image("./Shape-entire_vs_dissected_hp1d.Rimage")
+write.table(hp1d_postdist,"./Shape-entire_vs_dissected_hp1d_postdist-2.txt",sep="\t")
+save.image("./Shape-entire_vs_dissected_hp1d-2.Rimage")

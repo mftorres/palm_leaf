@@ -8,15 +8,16 @@ numCores <- detectCores()
 numCores
 registerDoParallel(numCores)
 completeFun <- function(data, desiredCols) {
-	completeVec <- complete.cases(data[, desiredCols])
-	return(data[completeVec, ])
+  completeVec <- complete.cases(data[, desiredCols])
+  return(data[completeVec, ])
 }
 dataall<-read.csv("./palms_alltraits_curated_20220620.csv",quote="",sep="\t",header=TRUE)
 posdis42<-read.tree("./Clean_1_42presampled.trees")
-data_pre<-completeFun(dataall,c('CHELSA_ai_stand', 'CHELSA_bio1_stand', 'CHELSA_bio4_stand', 'CHELSA_bio15_stand', 'Max_Rachis_Length_m_stand', 'HeightOverCanopy_stand'))
-data_hp2a<-filter(data_pre, pinnate_binomial == "True" | entire_binomial == "True")
+data_pre<-completeFun(dataall,c('CHELSA_ai_stand', 'CHELSA_bio1_stand', 'CHELSA_bio4_stand', 'CHELSA_bio15_stand', 'StemHeightBladeLength_stand'))
+
+data_hp2a<-filter(data_pre, entire_binomial == "True" | dissection == 1)
 rownames(data_hp2a) <- data_hp2a$tip_name
-data_hp2a$pinnate_binomial<-factor(data_hp2a$pinnate_binomial)
+data_hp2a$dissection<-factor(data_hp2a$dissection)
 data_hp2a$CHELSA_ai_stand<-as.numeric(data_hp2a$CHELSA_ai_stand)
 data_hp2a$CHELSA_bio1_stand<-as.numeric(data_hp2a$CHELSA_bio1_stand)
 data_hp2a$CHELSA_bio4_stand<-as.numeric(data_hp2a$CHELSA_bio4_stand)
@@ -26,8 +27,8 @@ data_hp2a$HeightOverCanopy_stand<-as.numeric(data_hp2a$HeightOverCanopy_stand)
 tree1<-posdis42[[1]]
 missingspp<-setdiff(sort(tree1$tip.label),sort(data_hp2a$tip_name))
 data_hp2a$animal <- factor(data_hp2a$tip_name)
-Nburn <- 500
-Nnitt <- 10000000
+Nburn <- 9000
+Nnitt <- 20000000
 Nthin <- 5000
 k <- 2
 I <- diag(k-1)
@@ -36,9 +37,9 @@ priors<-list(R=list(V=(1/k)*(I+J), fix=1), G=list(G1=list(V=diag(k-1), nu=0.002)
 n_tree=42
 packages=c("ape","phytools","MCMCglmmRAM","dplyr")
 hp2a_postdist<-c()
-hp1a_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar% {
+hp2a_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar% {
 	tree2<-drop.tip(posdis42[[i]],c(missingspp))
-	modelhp2a<- MCMCglmm(pinnate_binomial~CHELSA_ai_stand+CHELSA_bio1_stand+CHELSA_bio4_stand+CHELSA_bio15_stand+Max_Rachis_Length_m_stand+HeightOverCanopy_stand,
+	modelhp2a<- MCMCglmm(dissection~CHELSA_ai_stand+CHELSA_bio1_stand+CHELSA_bio4_stand+CHELSA_bio15_stand+Max_Rachis_Length_m_stand+HeightOverCanopy_stand,
 			random = ~animal,
 			data = data_hp2a,
 			reduced = TRUE,
@@ -49,7 +50,7 @@ hp1a_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar%
 			burnin = Nburn, nitt = Nnitt, thin = Nthin,
 			pr = TRUE, pl = TRUE, saveX = TRUE,  saveZ = TRUE)
 	hp2a_postdist<-rbind(hp2a_postdist,modelhp2a$Sol)
-	write.table(hp2a_postdist,"./Shape-pinnate_vs_entire_hp2a_postdist-1.txt",sep="\t")
+	write.table(hp2a_postdist,"./Shape-entire_vs_dissected_hp2a_postdist-2.txt",sep="\t")
 }
-write.table(hp2a_postdist,"./Shape-pinnate_vs_entire_hp2a_postdist-1.txt",sep="\t")
-save.image("./Shape-pinnate_vs_entire_hp2a-1.Rimage")
+write.table(hp2a_postdist,"./Shape-entire_vs_dissected_hp2a_postdist-2.txt",sep="\t")
+save.image("./Shape-entire_vs_dissected_hp2a-2.Rimage")

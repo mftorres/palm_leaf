@@ -2,6 +2,11 @@ library(ape)
 library(phytools)
 library(MCMCglmmRAM)
 library(dplyr)
+library(foreach)
+library(doParallel)
+numCores <- detectCores()
+numCores
+registerDoParallel(numCores)
 completeFun <- function(data, desiredCols) {
 	completeVec <- complete.cases(data[, desiredCols])
 	return(data[completeVec, ])
@@ -28,9 +33,10 @@ I <- diag(k-1)
 J <- matrix(rep(1, (k-1)^2), c(k-1, k-1))
 priors<-list(R=list(V=(1/k)*(I+J), fix=1), G=list(G1=list(V=diag(k-1), nu=0.002)))
 n_tree=42
+packages=c("ape","phytools","MCMCglmmRAM","dplyr")
 hp1c_postdist<-c()
-for(tree in 1:n_tree){
-	tree2<-drop.tip(posdis42[[tree]],c(missingspp))
+hp1a_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar% {
+	tree2<-drop.tip(posdis42[[i]],c(missingspp))
 	modelhp1c<- MCMCglmm(pinnate_binomial~CHELSA_ai_stand+CHELSA_bio1_stand+CHELSA_bio4_stand+CHELSA_bio15_stand+HeightOverCanopy_stand,
 			random = ~animal,
 			data = data_hp1c,
@@ -42,7 +48,7 @@ for(tree in 1:n_tree){
 			burnin = Nburn, nitt = Nnitt, thin = Nthin,
 			pr = TRUE, pl = TRUE, saveX = TRUE,  saveZ = TRUE)
 	hp1c_postdist<-rbind(hp1c_postdist,modelhp1c$Sol)
-	write.table(hp1c_postdist,"./Shape-pinnate_vs_entire_hp1c_postdist.txt",sep="\t")
+	write.table(hp1c_postdist,"./Shape-pinnate_vs_entire_hp1c_postdist-1.txt",sep="\t")
 }
-write.table(hp1c_postdist,"./Shape-pinnate_vs_entire_hp1c_postdist.txt",sep="\t")
-save.image("./Shape-pinnate_vs_entire_hp1c.Rimage")
+write.table(hp1c_postdist,"./Shape-pinnate_vs_entire_hp1c_postdist-1.txt",sep="\t")
+save.image("./Shape-pinnate_vs_entire_hp1c-1.Rimage")

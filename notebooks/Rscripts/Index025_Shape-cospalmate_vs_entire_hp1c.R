@@ -14,7 +14,7 @@ completeFun <- function(data, desiredCols) {
 dataall<-read.csv("./palms_alltraits_curated_20220620.csv",quote="",sep="\t",header=TRUE)
 posdis42<-read.tree("./Clean_1_42presampled.trees")
 data_pre<-completeFun(dataall,c('CHELSA_ai_stand', 'CHELSA_bio1_stand', 'CHELSA_bio4_stand', 'CHELSA_bio15_stand', 'HeightOverCanopy_stand'))
-data_hp1c<-filter(data_pre, cospalmate_binomial == "True" | pinnate_binomial == "True")
+data_hp1c<-filter(data_pre, cospalmate_binomial == "True" | entire_binomial == "True")
 rownames(data_hp1c) <- data_hp1c$tip_name
 data_hp1c$cospalmate_binomial<-factor(data_hp1c$cospalmate_binomial)
 data_hp1c$CHELSA_ai_stand<-as.numeric(data_hp1c$CHELSA_ai_stand)
@@ -48,7 +48,7 @@ hp1a_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar%
 			burnin = Nburn, nitt = Nnitt, thin = Nthin,
 			pr = TRUE, pl = TRUE, saveX = TRUE,  saveZ = TRUE)
 	hp1c_postdist<-rbind(hp1c_postdist,modelhp1c$Sol)
-	write.table(hp1c_postdist,"./Shape-cospalmate_vs_pinnate_hp1c_postdist-1.txt",sep="\t")
+	write.table(hp1c_postdist,"./Shape-cospalmate_vs_entire_hp1c_postdist-2.txt",sep="\t")
 }
-write.table(hp1c_postdist,"./Shape-cospalmate_vs_pinnate_hp1c_postdist-1.txt",sep="\t")
-save.image("./Shape-cospalmate_vs_pinnate_hp1c-1.Rimage")
+write.table(hp1c_postdist,"./Shape-cospalmate_vs_entire_hp1c_postdist-2.txt",sep="\t")
+save.image("./Shape-cospalmate_vs_entire_hp1c-2.Rimage")

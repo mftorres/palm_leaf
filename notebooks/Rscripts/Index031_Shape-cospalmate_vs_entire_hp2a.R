@@ -14,9 +14,9 @@ completeFun <- function(data, desiredCols) {
 dataall<-read.csv("./palms_alltraits_curated_20220620.csv",quote="",sep="\t",header=TRUE)
 posdis42<-read.tree("./Clean_1_42presampled.trees")
 data_pre<-completeFun(dataall,c('CHELSA_ai_stand', 'CHELSA_bio1_stand', 'CHELSA_bio4_stand', 'CHELSA_bio15_stand', 'Max_Rachis_Length_m_stand', 'HeightOverCanopy_stand'))
-data_hp2a<-filter(data_pre, pinnate_binomial == "True" | entire_binomial == "True")
+data_hp2a<-filter(data_pre, cospalmate_binomial == "True" | entire_binomial == "True")
 rownames(data_hp2a) <- data_hp2a$tip_name
-data_hp2a$pinnate_binomial<-factor(data_hp2a$pinnate_binomial)
+data_hp2a$cospalmate_binomial<-factor(data_hp2a$cospalmate_binomial)
 data_hp2a$CHELSA_ai_stand<-as.numeric(data_hp2a$CHELSA_ai_stand)
 data_hp2a$CHELSA_bio1_stand<-as.numeric(data_hp2a$CHELSA_bio1_stand)
 data_hp2a$CHELSA_bio4_stand<-as.numeric(data_hp2a$CHELSA_bio4_stand)
@@ -38,7 +38,7 @@ packages=c("ape","phytools","MCMCglmmRAM","dplyr")
 hp2a_postdist<-c()
 hp1a_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar% {
 	tree2<-drop.tip(posdis42[[i]],c(missingspp))
-	modelhp2a<- MCMCglmm(pinnate_binomial~CHELSA_ai_stand+CHELSA_bio1_stand+CHELSA_bio4_stand+CHELSA_bio15_stand+Max_Rachis_Length_m_stand+HeightOverCanopy_stand,
+	modelhp2a<- MCMCglmm(cospalmate_binomial~CHELSA_ai_stand+CHELSA_bio1_stand+CHELSA_bio4_stand+CHELSA_bio15_stand+Max_Rachis_Length_m_stand+HeightOverCanopy_stand,
 			random = ~animal,
 			data = data_hp2a,
 			reduced = TRUE,
@@ -49,7 +49,7 @@ hp1a_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar%
 			burnin = Nburn, nitt = Nnitt, thin = Nthin,
 			pr = TRUE, pl = TRUE, saveX = TRUE,  saveZ = TRUE)
 	hp2a_postdist<-rbind(hp2a_postdist,modelhp2a$Sol)
-	write.table(hp2a_postdist,"./Shape-pinnate_vs_entire_hp2a_postdist-1.txt",sep="\t")
+	write.table(hp2a_postdist,"./Shape-cospalmate_vs_entire_hp2a_postdist-2.txt",sep="\t")
 }
-write.table(hp2a_postdist,"./Shape-pinnate_vs_entire_hp2a_postdist-1.txt",sep="\t")
-save.image("./Shape-pinnate_vs_entire_hp2a-1.Rimage")
+write.table(hp2a_postdist,"./Shape-cospalmate_vs_entire_hp2a_postdist-2.txt",sep="\t")
+save.image("./Shape-cospalmate_vs_entire_hp2a-2.Rimage")
