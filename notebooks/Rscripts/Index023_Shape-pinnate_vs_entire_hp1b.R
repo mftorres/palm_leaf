@@ -34,8 +34,8 @@ J <- matrix(rep(1, (k-1)^2), c(k-1, k-1))
 priors<-list(R=list(V=(1/k)*(I+J), fix=1), G=list(G1=list(V=diag(k-1), nu=0.002)))
 n_tree=42
 packages=c("ape","phytools","MCMCglmmRAM","dplyr")
-hp1b_postdist<-c()
-hp1a_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar% {
+hp1b_postdist <-c()
+hp1b_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar% {
 	tree2<-drop.tip(posdis42[[i]],c(missingspp))
 	modelhp1b<- MCMCglmm(pinnate_binomial~CHELSA_ai_stand+CHELSA_bio1_stand+CHELSA_bio12_stand+CHELSA_bio15_stand+StemHeightBladeLength_stand,
 			random = ~animal,

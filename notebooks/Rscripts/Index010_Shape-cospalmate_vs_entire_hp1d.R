@@ -34,8 +34,8 @@ J <- matrix(rep(1, (k-1)^2), c(k-1, k-1))
 priors<-list(R=list(V=(1/k)*(I+J), fix=1), G=list(G1=list(V=diag(k-1), nu=0.002)))
 n_tree=42
 packages=c("ape","phytools","MCMCglmmRAM","dplyr")
-hp1d_postdist<-c()
-hp1a_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar% {
+hp1d_postdist <-c()
+hp1d_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar% {
 	tree2<-drop.tip(posdis42[[i]],c(missingspp))
 	modelhp1d<- MCMCglmm(cospalmate_binomial~CHELSA_ai_stand+CHELSA_bio1_stand+CHELSA_bio12_stand+CHELSA_bio15_stand+HeightOverCanopy_stand,
 			random = ~animal,
@@ -48,7 +48,7 @@ hp1a_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar%
 			burnin = Nburn, nitt = Nnitt, thin = Nthin,
 			pr = TRUE, pl = TRUE, saveX = TRUE,  saveZ = TRUE)
 	hp1d_postdist<-rbind(hp1d_postdist,modelhp1d$Sol)
-	write.table(hp1d_postdist,"./Shape-cospalmate_vs_entire_hp1d_postdist-1.txt",sep="\t")
+	write.table(hp1d_postdist,"./Shape-cospalmate_vs_entire_hp1d_postdist-2.txt",sep="\t")
 }
-write.table(hp1d_postdist,"./Shape-cospalmate_vs_entire_hp1d_postdist-1.txt",sep="\t")
-save.image("./Shape-cospalmate_vs_entire_hp1d-1.Rimage")
+write.table(hp1d_postdist,"./Shape-cospalmate_vs_entire_hp1d_postdist-2.txt",sep="\t")
+save.image("./Shape-cospalmate_vs_entire_hp1d-2.Rimage")

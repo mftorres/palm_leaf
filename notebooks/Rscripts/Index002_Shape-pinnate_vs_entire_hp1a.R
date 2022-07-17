@@ -34,7 +34,7 @@ J <- matrix(rep(1, (k-1)^2), c(k-1, k-1))
 priors<-list(R=list(V=(1/k)*(I+J), fix=1), G=list(G1=list(V=diag(k-1), nu=0.002)))
 n_tree=42
 packages=c("ape","phytools","MCMCglmmRAM","dplyr")
-hp1a_postdist<-c()
+hp1a_postdist <-c()
 hp1a_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar% {
 	tree2<-drop.tip(posdis42[[i]],c(missingspp))
 	modelhp1a<- MCMCglmm(pinnate_binomial~CHELSA_ai_stand+CHELSA_bio1_stand+CHELSA_bio4_stand+CHELSA_bio15_stand+StemHeightBladeLength_stand,
@@ -48,7 +48,7 @@ hp1a_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar%
 			burnin = Nburn, nitt = Nnitt, thin = Nthin,
 			pr = TRUE, pl = TRUE, saveX = TRUE,  saveZ = TRUE)
 	hp1a_postdist<-rbind(hp1a_postdist,modelhp1a$Sol)
-	write.table(hp1a_postdist,"./Shape-pinnate_vs_entire_hp1a_postdist-1.txt",sep="\t")
+	write.table(hp1a_postdist,"./Shape-pinnate_vs_entire_hp1a_postdist-2.txt",sep="\t")
 }
-write.table(hp1a_postdist,"./Shape-pinnate_vs_entire_hp1a_postdist-1.txt",sep="\t")
-save.image("./Shape-pinnate_vs_entire_hp1a-1.Rimage")
+write.table(hp1a_postdist,"./Shape-pinnate_vs_entire_hp1a_postdist-2.txt",sep="\t")
+save.image("./Shape-pinnate_vs_entire_hp1a-2.Rimage")
