@@ -50,7 +50,6 @@ hp2b_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar%
 			burnin = Nburn, nitt = Nnitt, thin = Nthin,
 			pr = TRUE, pl = TRUE, saveX = TRUE,  saveZ = TRUE)
 	hp2b_postdist<-rbind(hp2b_postdist,modelhp2b$Sol)
-	write.table(hp2b_postdist,"./Shape-entire_vs_dissected_hp2b_postdist-1.txt",sep="\t")
 }
 write.table(hp2b_postdist,"./Shape-entire_vs_dissected_hp2b_postdist-1.txt",sep="\t")
 save.image("./Shape-entire_vs_dissected_hp2b-1.Rimage")
