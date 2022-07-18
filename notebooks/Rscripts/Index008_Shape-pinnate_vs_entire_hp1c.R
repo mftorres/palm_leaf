@@ -48,7 +48,7 @@ hp1c_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar%
 			burnin = Nburn, nitt = Nnitt, thin = Nthin,
 			pr = TRUE, pl = TRUE, saveX = TRUE,  saveZ = TRUE)
 	hp1c_postdist<-rbind(hp1c_postdist,modelhp1c$Sol)
-	write.table(hp1c_postdist,"./Shape-pinnate_vs_entire_hp1c_postdist-2.txt",sep="\t")
+	write.table(hp1c_postdist,"./Shape-pinnate_vs_entire_hp1c_postdist-1.txt",sep="\t")
 }
-write.table(hp1c_postdist,"./Shape-pinnate_vs_entire_hp1c_postdist-2.txt",sep="\t")
-save.image("./Shape-pinnate_vs_entire_hp1c-2.Rimage")
+write.table(hp1c_postdist,"./Shape-pinnate_vs_entire_hp1c_postdist-1.txt",sep="\t")
+save.image("./Shape-pinnate_vs_entire_hp1c-1.Rimage")

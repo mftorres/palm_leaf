@@ -48,7 +48,7 @@ hp1b_postdist <- foreach(i=1:n_tree, .combine=rbind, .packages=packages) %dopar%
 			burnin = Nburn, nitt = Nnitt, thin = Nthin,
 			pr = TRUE, pl = TRUE, saveX = TRUE,  saveZ = TRUE)
 	hp1b_postdist<-rbind(hp1b_postdist,modelhp1b$Sol)
-	write.table(hp1b_postdist,"./Shape-cospalmate_vs_pinnate_hp1b_postdist-2.txt",sep="\t")
+	write.table(hp1b_postdist,"./Shape-cospalmate_vs_pinnate_hp1b_postdist-1.txt",sep="\t")
 }
-write.table(hp1b_postdist,"./Shape-cospalmate_vs_pinnate_hp1b_postdist-2.txt",sep="\t")
-save.image("./Shape-cospalmate_vs_pinnate_hp1b-2.Rimage")
+write.table(hp1b_postdist,"./Shape-cospalmate_vs_pinnate_hp1b_postdist-1.txt",sep="\t")
+save.image("./Shape-cospalmate_vs_pinnate_hp1b-1.Rimage")
