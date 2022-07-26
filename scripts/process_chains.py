@@ -209,7 +209,7 @@ for mod in models:
     for col in list(temp1.columns):
         desc.loc[col,'ESS']=effectiveSampleSize(list(temp1[col].dropna().values))
         desc.loc[col,'HPD_025']=hpd(list(temp1[col].dropna().values),0.95)[0]
-        desc.loc[col,'HPD_025']=hpd(list(temp1[col].dropna().values),0.95)[1]
+        desc.loc[col,'HPD_095']=hpd(list(temp1[col].dropna().values),0.95)[1]
         desc.loc[col,'samples_above0']=len(temp1[temp1[col]>0])
         desc.loc[col,'samples_total']=len(temp1[col])
         desc.loc[col,'prop_above0']=len(temp1[temp1[col]>0])/len(temp1[col])
