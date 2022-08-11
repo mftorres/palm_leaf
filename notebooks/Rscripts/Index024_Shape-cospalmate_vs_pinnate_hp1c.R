@@ -27,7 +27,7 @@ missingspp<-setdiff(sort(tree1$tip.label),sort(data_hp1c$tip_name))
 data_hp1c$animal <- factor(data_hp1c$tip_name)
 Nburn <- 500
 Nnitt <- 10000000
-Nthin <- 5000
+Nthin <- 8000
 k <- 2
 I <- diag(k-1)
 J <- matrix(rep(1, (k-1)^2), c(k-1, k-1))
