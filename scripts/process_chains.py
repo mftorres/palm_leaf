@@ -111,10 +111,16 @@ print('Models: ',[str(x) for x in models])
 
 
 # get file headers. All files must be the same model and thus shuld have the same header
-with open(os.path.join(input_path,'%s'%(filearray[0])), 'r') as f:
-    header=f.readline().rstrip().split('\t')
+header=[]
+for file in filearray:
+    with open(os.path.join(input_path,'%s'%(file)), 'r') as f:
+        headertemp=f.readline().rstrip().split('\t')
+        for x in headertemp:
+            if x not in header:
+                header.append(x)
+                
 
-# print(header)
+print(header)
 
 # create empty dataframe
 alldata=pd.DataFrame(columns=header+['chain','model']) # new columns in other models will be automatically added anyways
@@ -128,7 +134,7 @@ for index in range(len(filearray)):
     temp=pd.read_csv(filename[0],sep='\t')
     temp.loc[temp.index,'chain']=int(filearray[index].split('-')[2].replace('.txt.out',''))
     temp.loc[temp.index,'model']=str(model)
-    alldata=pd.concat([alldata,temp],sort=False) # all columns should be in the same order
+    alldata=pd.concat([alldata,temp],sort=True) # all columns should be in the same order
     print('Rows by now: %s  '%(len(alldata)),'Rows added: %s  '%(len(temp)))
 
 print('All data loaded with %s rows'%(len(alldata)))
@@ -141,7 +147,7 @@ chain_coldict=colourDict([int(x) for x in alldata['chain'].unique()],cmap=mpl.cm
 print('plotting variables with separate chains')
 
 for mod in models:
-    temp1=alldata[alldata['model']==mod]
+    temp1=alldata[alldata['model']==mod].dropna(axis=1)
     colnames=list(temp1.columns)
     for x in ['index','Intercept','chain','model']:
         colnames.remove(x)
@@ -170,7 +176,7 @@ for mod in models:
 print('plotting variables with overlapping chains')
 
 for mod in models:
-    temp1=alldata[alldata['model']==mod]
+    temp1=alldata[alldata['model']==mod].dropna(axis=1)
     colnames=list(temp1.columns)
     for x in ['index','Intercept','chain','model']:
         colnames.remove(x)
@@ -208,7 +214,7 @@ for mod in models:
     desc['median']=temp1.median()
     for col in list(temp1.columns):
         desc.loc[col,'ESS']=effectiveSampleSize(list(temp1[col].dropna().values))
-        desc.loc[col,'HPD_025']=hpd(list(temp1[col].dropna().values),0.95)[0]
+        desc.loc[col,'HPD_025']=hpd(list(temp1[col].dropna().values),0.25)[0]
         desc.loc[col,'HPD_095']=hpd(list(temp1[col].dropna().values),0.95)[1]
         desc.loc[col,'samples_above0']=len(temp1[temp1[col]>0])
         desc.loc[col,'samples_total']=len(temp1[col])
