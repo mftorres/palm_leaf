@@ -3,7 +3,7 @@ Palm Leaf notebook repository
 
 This repository stores the code associated with the project:
 
-**Plant habit and temperature seasonality determine leaf shape in palms (Arecaceae)**
+**Plant height predicts leaf shape in palms (Arecaceae)**
 =============
 
 Authors: **Maria Fernanda Torres Jiménez<sup>1,2</sup>**, Nicolas Chazot<sup>1,2</sup>, Thaise Emilio<sup>3</sup>, Johan Uddling F<sup>1</sup>, Alexandre Antonelli<sup>1,2,4,5</sup>, Søren Faurby<sup>1,2</sup>, Christine D. Bacon<sup>1,2</sup>
