@@ -3,7 +3,7 @@ Palm Leaf notebook repository
 
 This repository stores the code associated with the project:
 
-**Plant height predicts leaf shape in palms (Arecaceae)**
+**Functional and historical drivers of leaf shape evolution in Palms (Arecaceae)**
 =============
 
 Authors: **Maria Fernanda Torres Jiménez<sup>1,2,3</sup>**, Nicolas Chazot<sup>1,2</sup>, Thaise Emilio<sup>4</sup>, Johan Uddling F<sup>1</sup>, Alexandre Antonelli<sup>1,2,5,6</sup>, Søren Faurby<sup>1,2</sup>, Christine D. Bacon<sup>1,2</sup>
